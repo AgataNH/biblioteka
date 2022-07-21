@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, redirect, jsonify
+from flask import Flask, request, url_for, redirect, jsonify, Response
 import sqlite3
 from sqlite3 import Error
 
@@ -9,7 +9,7 @@ from app import app, db_manager
 def create_author():
     data = request.json
     db_manager.create_author(data["name"], data["surname"])
-    return redirect(url_for("homepage"))
+    return Response(status=201)
 
 
 @app.route("/list/author", methods=["GET"])
@@ -30,7 +30,7 @@ def list_author():
 def create_book():
     data = request.json
     db_manager.create_book(data["author_id"], data["title"])
-    return redirect(url_for("homepage"))
+    return Response(status=201)
 
 @app.route("/list/books", methods=["GET"])
 def list_books():
@@ -41,19 +41,15 @@ def list_books():
             {
                 "id": book.id,
                 "title": book.title,
-                "author_id": book.author_id
+                "author": f"{book.author.name} {book.author.surname}",
+                "rentals_date": book.rentals
             }
         )
     return jsonify(result)
 
-@app.route("/rent/<book_id>", methods=["POST"])
-def rent_book():
-    data = request.json
-    db_manager.rent_book(data["book_id"], data["rental_date"])
-    return redirect(url_for("homepage"))
+@app.route("/rent/<book_id>", methods=["GET"])
+def rent_book(book_id):
+    db_manager.rent_book(book_id)
+    return Response(status=201)
 
-@app.route('/')
-def homepage():
-    hello = "To jest moja biblioteka"
-    return f"{hello}"
 

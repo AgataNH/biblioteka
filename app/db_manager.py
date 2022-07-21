@@ -1,12 +1,13 @@
 import sqlite3
-from .models import Author, Book
+from .models import Author, Book, Rental
 from app import db
 
 
-def create_author(name):
+def create_author(name, surname):
     #sql alchemy
     author = Author()
     author.name = name
+    author.surname = surname
     db.session.commit()
 
 
@@ -22,3 +23,8 @@ def get_authors():
 
 def get_books():
     return Book.query.all()
+
+def rent_book(book_id):
+    rental = Rental()
+    rental.book_id = book_id
+    db.session.commit()
