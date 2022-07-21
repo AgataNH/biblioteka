@@ -8,6 +8,7 @@ def create_author(name, surname):
     author = Author()
     author.name = name
     author.surname = surname
+    db.session.add(author)
     db.session.commit()
 
 
@@ -15,6 +16,7 @@ def create_book(author_id, title):
     book = Book()
     book.author_id = author_id
     book.title = title
+    db.session.add(book)
     db.session.commit()
 
 
@@ -27,4 +29,5 @@ def get_books():
 def rent_book(book_id):
     rental = Rental()
     rental.book_id = book_id
+    db.session.add(rental)
     db.session.commit()

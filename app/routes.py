@@ -42,7 +42,7 @@ def list_books():
                 "id": book.id,
                 "title": book.title,
                 "author": f"{book.author.name} {book.author.surname}",
-                "rentals_date": book.rentals
+                "rentals_date": book.rentals[0].rental_date if book.rentals else "-"
             }
         )
     return jsonify(result)
